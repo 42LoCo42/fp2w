@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+line() {
+	awk "NR == $1 {print \$0}"
+}
+
+gpg2 --list-secret-keys --with-fingerprint "$1" \
+| line 2 \
+| sed "s|^\s*||; s|  | |" \
+| tr " " "\n" \
+| sed -E "s|(.)$|\1+1|" \
+| { echo "ibase=16"; tee; } \
+| bc \
+| while read -r i; do
+	line "$i" < "fingerprint_words.txt"
+done \
+| tr "\n" " "
+echo
