@@ -17,7 +17,7 @@ command -v "$gpg" >/dev/null || {
 	exit 1
 }
 
-$gpg --list-secret-keys --with-fingerprint "$1" \
+$gpg --list-key --with-fingerprint "$1" \
 | line 2 \
 | sed -E "s|^\s*(Key fingerprint = )?||; s|  | |" \
 | tr " " "\n" \
